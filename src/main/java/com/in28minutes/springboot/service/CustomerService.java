@@ -2,6 +2,8 @@ package com.in28minutes.springboot.service;
 
 import com.in28minutes.springboot.model.Customer;
 import com.in28minutes.springboot.model.Response;
+import com.in28minutes.springboot.repository.ICustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
@@ -9,41 +11,29 @@ import java.util.ArrayList;
 import java.util.List;
 @Component
 public class CustomerService {
-    public static List<Customer> listCustomer = new ArrayList<>();
+    @Autowired
+    private ICustomerRepository customerRepository;
 
-    static {
-        Customer customer_1 = new Customer(1,"Nam",23,"nam@gmail.com");
-        listCustomer.add(customer_1);
-    }
-
-    public Customer createNewCustomer(Customer customer){
-        int idCustomerEnd = listCustomer.get(listCustomer.size() - 1).getId();
-        customer.setId(idCustomerEnd + 1);
-        listCustomer.add(customer);
-        return customer;
-    }
 
     public List<Customer> getAllCustomer(){
-        return listCustomer;
+        return customerRepository.findAll();
     }
 
-    public Customer getCustomerById(Integer id){
-        for(Customer customer : listCustomer){
-            if(id.equals(customer.getId()) ){
-                return customer;
-            }
-        }
-        return null;
+    public Customer getCustomerById(Integer id) throws NullPointerException{
+        return customerRepository.findById(id).get();
     }
 
-    public Response deleteCustomerById(Integer id){
-        for(Customer customer : listCustomer){
-            if(id.equals(customer.getId())){
-                listCustomer.remove(customer);
-                return new Response( true);
-            }
+    public List<Customer> deleteCustomerById(Integer id){
+        Customer customer = getCustomerById(id);
+        customerRepository.deleteById(customer.getId());
+        return customerRepository.findAll();
+    }
+    public Customer updateCustomer(Customer customer, Integer id){
+       Customer findCustomer = getCustomerById(id);
+        if(customer.getId() == findCustomer.getId()){
+            customerRepository.save(customer);
         }
-        return new Response(false);
+        return getCustomerById(id);
     }
 
 }

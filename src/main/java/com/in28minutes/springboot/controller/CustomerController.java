@@ -15,13 +15,8 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @PostMapping(path = "/customer/create")
-    public ResponseEntity createCustomer(@RequestBody Customer customer){
-        return ResponseEntity.ok().body(customerService.createNewCustomer(customer));
-    }
-
     @GetMapping("/customers/list")
-    public List<Customer> getCustomers(){
+    public List<Customer> getCustomersList(){
         return customerService.getAllCustomer();
     }
 
@@ -36,8 +31,13 @@ public class CustomerController {
 
     // Có thể tạo thêm class feedback để mô tả thông tin trả về
     @GetMapping("/customer/delete/{cusId}")
-    public Response deleteCustomerById(@PathVariable("cusId") Integer id){
+    public List<Customer> deleteCustomerById(@PathVariable("cusId") Integer id){
         return customerService.deleteCustomerById(id);
+    }
+
+    @PostMapping("/customer/update/{Cusid}")
+    public Customer updateCustomer(Customer customer, @PathVariable("Cusid") Integer id){
+        return customerService.updateCustomer(customer,id);
     }
 
 }

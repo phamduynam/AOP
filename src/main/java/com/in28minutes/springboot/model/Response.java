@@ -14,4 +14,5 @@ public class Response {
     public void setSucess(boolean sucess) {
         this.sucess = sucess;
     }
+
 }
