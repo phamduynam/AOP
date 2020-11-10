@@ -1,5 +1,6 @@
 package com.in28minutes.springboot.controller;
 
+import com.in28minutes.springboot.dto.CustomerInternationalizationDto;
 import com.in28minutes.springboot.model.Customer;
 import com.in28minutes.springboot.model.Response;
 import com.in28minutes.springboot.service.CustomerService;
@@ -22,7 +23,8 @@ public class CustomerController {
 
     @GetMapping("/customer/{cusId}")
     public ResponseEntity getCustomerById(@PathVariable("cusId") Integer id){
-        Customer customer = customerService.getCustomerById(id);
+        CustomerInternationalizationDto customer = customerService.getCustomerById(id);
+
         if( customer!= null){
             return ResponseEntity.ok().body(customer);
         }
@@ -30,14 +32,14 @@ public class CustomerController {
     }
 
     // Có thể tạo thêm class feedback để mô tả thông tin trả về
-    @GetMapping("/customer/delete/{cusId}")
-    public List<Customer> deleteCustomerById(@PathVariable("cusId") Integer id){
-        return customerService.deleteCustomerById(id);
-    }
-
-    @PostMapping("/customer/update/{Cusid}")
-    public Customer updateCustomer(Customer customer, @PathVariable("Cusid") Integer id){
-        return customerService.updateCustomer(customer,id);
-    }
+//    @GetMapping("/customer/delete/{cusId}")
+//    public List<Customer> deleteCustomerById(@PathVariable("cusId") Integer id){
+//        return customerService.deleteCustomerById(id);
+//    }
+//
+//    @PostMapping("/customer/update/{Cusid}")
+//    public Customer updateCustomer(Customer customer, @PathVariable("Cusid") Integer id){
+//        return customerService.updateCustomer(customer,id);
+//    }
 
 }
