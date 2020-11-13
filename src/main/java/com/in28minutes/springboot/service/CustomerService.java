@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.time.Instant;
@@ -18,8 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-@Component
+@Service
 @PropertySource("classpath:meassages_en.properties")
 public class CustomerService {
 
@@ -47,29 +47,30 @@ public class CustomerService {
         customerResult.setAge(customer.getAge());
         customerResult.setEmail(customer.getEmail());
         customerResult.setName_VN(customer.getName());
+        
         customerResult.setName_EN(this.listNameEn.get(customer.getId()));
         // có 2 cách lấy nameEN của customer
         // Cách 1: Environment
-        System.out.println(environment.getProperty("nameMap"));
+//        System.out.println(environment.getProperty("nameMap"));
         // Cách 2: @Value()
-        System.out.println(this.listNameEn);
+//        System.out.println(this.listNameEn);
 
-        System.out.println(customerResult.toString());
+//        System.out.println(customerResult.toString());
 
         return customerResult;
     }
-//
+
 //    public List<Customer> deleteCustomerById(Integer id){
 //        Customer customer = getCustomerById(id);
 //        customerRepository.deleteById(customer.getId());
 //        return customerRepository.findAll();
 //    }
-//    public Customer updateCustomer(Customer customer, Integer id){
-//       Customer findCustomer = getCustomerById(id);
-//        if(customer.getId() == findCustomer.getId()){
-//            customerRepository.save(customer);
-//        }
-//        return getCustomerById(id);
-//    }
+    public Customer updateCustomer(Customer customer, Integer id) throws NullPointerException{
+       Customer findCustomer = customerRepository.findById(id).get();
+        if(customer.getId() == findCustomer.getId()){
+            customerRepository.save(customer);
+        }
+        return customerRepository.findById(id).get();
+    }
 
 }
